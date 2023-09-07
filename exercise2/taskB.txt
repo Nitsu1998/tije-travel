@@ -1,0 +1,23 @@
+---------------------------------------------------------------------
+
+Para actualizar la tabla "products" incrementando un 20% los precios almacenados en la columna "retail_rate_reference"
+para los registros que tengan su tarifa ("net_rate_reference") entre "100" y "200", puedes usar la siguiente consulta:
+
+UPDATE products
+SET retail_rate_reference = retail_rate_reference * 1.20
+WHERE net_rate_reference BETWEEN 100 AND 200;
+
+---------------------------------------------------------------------
+
+Para actualizar la tabla ‘product_options’ colocando en ‘updated_at’ la fecha y hora actuales para el mismo conjunto de
+productos, puedes utilizar la siguiente consulta:
+
+UPDATE product_option
+SET updated_at = NOW()
+WHERE product_id IN (
+    SELECT id
+    FROM products
+    WHERE net_rate_reference BETWEEN 100 AND 200
+);
+
+---------------------------------------------------------------------

@@ -1,0 +1,41 @@
+---------------------------------------------------------------------
+
+Los valores "id", "name", "short_description" y "long_description" de los registros de la tabla 'products'
+que tengan 'shortCode' distinto a 'X12345':
+
+SELECT id, name, short_description, long_description
+FROM products
+WHERE short_code <> 'X12345';
+
+---------------------------------------------------------------------
+
+La cantidad de registros de la tabla 'products' para el supplier ID 1 (campo: supplier_id) que hayan sido
+actualizados el día de hoy (campo: updated_at):
+
+SELECT COUNT(*)
+FROM products
+WHERE supplier_id = 1
+AND DATE(updated_at) = CURDATE();
+
+---------------------------------------------------------------------
+
+Los valores "duration" únicos (sin repeticiones) de la tabla 'products' para los registros que tengan un 
+promedio de reseñas (reviews_average_rating) entre 4.0 y 4.5, y que tengan al menos un registro asociado 
+de la tabla 'product_option' cuyo 'name' sea igual a 'Adult':
+
+SELECT DISTINCT p.duration
+FROM products p
+INNER JOIN product_option po ON p.id = po.product_id
+WHERE p.reviews_average_rating BETWEEN 4.0 AND 4.5
+AND po.name = 'Adult';
+
+---------------------------------------------------------------------
+
+La última fecha de actualización (fetched_at) para cada uno de los proveedores (por campo supplier_id),
+considerando todos los productos del mismo:
+
+SELECT supplier_id, MAX(fetched_at) AS last_update
+FROM products
+GROUP BY supplier_id;
+
+---------------------------------------------------------------------
