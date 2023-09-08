@@ -25,7 +25,6 @@ class ProductsRepository extends ServiceEntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('p');
 
-        // Check if the supplierId parameter is provided and valid
         if ($supplierId !== null && is_numeric($supplierId)) {
             $queryBuilder
                 ->andWhere('p.supplier_id = :supplier_id')

@@ -36,8 +36,6 @@ class Product {
         return json_encode($jsonArray, JSON_PRETTY_PRINT);
     }
 
-    
-    // Method to calculate averageRating based on reviews
     public function calculateAverageRating(array $reviewCountTotals): void {
 
        if (empty($reviewCountTotals)) {
@@ -59,7 +57,6 @@ class Product {
         $this->averageRating = round( $weightedSum / $totalReviews , 2);
     }
 
-    // Method to determine the largest images
     public function findLargestImages(array $images): void {
         foreach ($images as $image) {
             $largestVariant = $image['variants'][0];
@@ -72,7 +69,6 @@ class Product {
         }
     }
 
-    // Method to extract the meeting point
     public function extractMeetingPoint(string $description): void {
         $pattern = "/Meeting point: (.+?)(\n|$)/i";
         if (preg_match($pattern, $description, $matches)) {

@@ -13,33 +13,24 @@ class ProductController extends AbstractController
     #[Route('/products', name: 'products')]
     public function listProducts(Request $request, ProductsRepository $productRepository)
     {
-        // Access the supplierId query parameter from the request
         $supplierId = $request->query->get('supplierId');
 
-        // Use the custom repository method to retrieve products
         $products = $productRepository->findProductsBySupplierId($supplierId);
 
-        // Transform products to the desired JSON format
-        $data = [];
-        foreach ($products as $product) {
-
-            $media = [];
-            $product_urls = $product->getProductMedia();
-            foreach ($product_urls as $url) {
-                array_push($media, $url->getUrl());
-            }
-
-            $data[] = [
+        $data = array_map(function ($product) {
+            return [
                 'id' => $product->getId(),
                 'name' => $product->getName(),
-                'media' => $media,
+                'media' => array_map(function ($media) {
+                    return $media->getUrl();
+                }, $product->getProductMedia()->toArray()),
                 'description' => $product->getShortDescription(),
                 'status' => $product->getStatus(),
                 'createdAt' => $product->getCreatedAt()->format('Y-m-d H:i:s'),
                 'updatedAt' => $product->getUpdatedAt()->format('Y-m-d H:i:s'),
             ];
-        }
-
+        }, $products);
+    
         return new JsonResponse($data);
     }
 }
